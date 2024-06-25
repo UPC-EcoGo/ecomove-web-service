@@ -1,21 +1,17 @@
-package com.ecogo.ecomove_web_service.booking_reservation.application.internal.outboundservices.acl;
+package com.ecogo.ecomove_web_service.shared.application.internal.outboundservices.acl;
 
 import com.ecogo.ecomove_web_service.user_management.domain.model.aggregates.User;
 import com.ecogo.ecomove_web_service.user_management.interfaces.acl.UserContextFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-/**
- * Service to handle an external service
- */
 @Service
-public class ExternalUserServiceToBooking {
+public class ExternalUserService {
     private final UserContextFacade userContextFacade;
 
-    public ExternalUserServiceToBooking(UserContextFacade userContextFacade){
-        this.userContextFacade = userContextFacade;
+    public ExternalUserService(UserContextFacade userContextFacade){
+            this.userContextFacade = userContextFacade;
     }
-
     public Optional<User> fetchUserById(Long userId){
         return userContextFacade.fetchUserById(userId);
     }

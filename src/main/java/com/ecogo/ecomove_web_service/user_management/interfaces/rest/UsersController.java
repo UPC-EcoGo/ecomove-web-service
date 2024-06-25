@@ -21,11 +21,11 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "*")
 @Tag(name="Users", description = "Users Management Endpoints")
 public class UsersController {
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
-    commands
 
     public UsersController(UserCommandService userCommandService, UserQueryService userQueryService) {
         this.userCommandService = userCommandService;
@@ -34,6 +34,7 @@ public class UsersController {
 
     @Operation(summary = "Create a new user", description = "Creates a new user with the specified attributes")
     @PostMapping
+    @CrossOrigin(origins = "*")
     public ResponseEntity<UserResource> createUser(@RequestBody CreateUserResource createUserResource) {
         Optional<User> user = userCommandService.handle(CreateUserCommandFromResourceAssembler.fromResource(createUserResource));
         return user.map(u -> new ResponseEntity<>(UserResourceFromEntityAssembler.fromEntity(u), CREATED))
@@ -42,7 +43,8 @@ public class UsersController {
     }
 
     @Operation(summary = "Get user by username", description = "Returns the user with the specified username")
-    @GetMapping("{username}")
+    @GetMapping("username/{username}")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<UserResource> getUserByUsername(@PathVariable String username) {
         Optional<User> user = userQueryService.handle(new GetUserByUsernameQuery(username));
         return user.map(u -> new ResponseEntity<>(UserResourceFromEntityAssembler.fromEntity(u), OK))
@@ -50,7 +52,8 @@ public class UsersController {
     }
 
     @Operation(summary = "Get user by id", description = "Returns the user with the specified id")
-    @GetMapping("{id}")
+    @GetMapping("id/{id}")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<UserResource> getUserById(@PathVariable Long id) {
         Optional<User> user = userQueryService.handle(new GetUserByIdQuery(id));
         return user.map(u -> new ResponseEntity<>(UserResourceFromEntityAssembler.fromEntity(u), OK))
