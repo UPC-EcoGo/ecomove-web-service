@@ -9,10 +9,10 @@ import java.util.Optional;
  * Service to handle an external service
  */
 @Service
-public class ExternalEcoVehicleServiceToBooking {
+public class ExternalEcoVehicleService {
     private final EcoVehicleContextFacade ecoVehicleContextFacade;
 
-    public ExternalEcoVehicleServiceToBooking(EcoVehicleContextFacade ecoVehicleContextFacade){
+    public ExternalEcoVehicleService(EcoVehicleContextFacade ecoVehicleContextFacade){
         this.ecoVehicleContextFacade = ecoVehicleContextFacade;
     }
 

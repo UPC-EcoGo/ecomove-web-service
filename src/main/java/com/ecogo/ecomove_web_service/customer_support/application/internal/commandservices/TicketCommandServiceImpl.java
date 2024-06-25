@@ -1,6 +1,6 @@
 package com.ecogo.ecomove_web_service.customer_support.application.internal.commandservices;
 
-import com.ecogo.ecomove_web_service.customer_support.application.internal.outboundservices.acl.ExternalUserServiceToCustomerSupport;
+import com.ecogo.ecomove_web_service.shared.application.internal.outboundservices.acl.ExternalUserService;
 import com.ecogo.ecomove_web_service.customer_support.domain.model.aggregates.CustomerSupportAgent;
 import com.ecogo.ecomove_web_service.customer_support.domain.model.aggregates.Ticket;
 import com.ecogo.ecomove_web_service.customer_support.domain.model.commands.*;
@@ -18,10 +18,10 @@ public class TicketCommandServiceImpl implements TicketCommandService {
 
     private final TicketRepository ticketRepository;
     private final TicketCategoryRepository ticketCategoryRepository;
-    private final ExternalUserServiceToCustomerSupport externalUserService;
+    private final ExternalUserService externalUserService;
     private final CustomerSupportAgentRepository customerSupportAgentRepository;
 
-    public TicketCommandServiceImpl(TicketRepository ticketRepository, TicketCategoryRepository ticketCategoryRepository, CustomerSupportAgentRepository customerSupportAgentRepository, ExternalUserServiceToCustomerSupport externalUserService){
+    public TicketCommandServiceImpl(TicketRepository ticketRepository, TicketCategoryRepository ticketCategoryRepository, CustomerSupportAgentRepository customerSupportAgentRepository, ExternalUserService externalUserService){
         this.ticketRepository = ticketRepository;
         this.ticketCategoryRepository = ticketCategoryRepository;
         this.externalUserService = externalUserService;
