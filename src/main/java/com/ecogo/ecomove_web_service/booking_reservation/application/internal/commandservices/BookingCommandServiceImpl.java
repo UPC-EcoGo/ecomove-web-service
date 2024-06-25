@@ -1,13 +1,13 @@
 package com.ecogo.ecomove_web_service.booking_reservation.application.internal.commandservices;
 
-import com.ecogo.ecomove_web_service.booking_reservation.application.internal.outboundservices.acl.ExternalEcoVehicleServiceToBooking;
-import com.ecogo.ecomove_web_service.booking_reservation.application.internal.outboundservices.acl.ExternalUserServiceToBooking;
+import com.ecogo.ecomove_web_service.booking_reservation.application.internal.outboundservices.acl.ExternalEcoVehicleService;
 import com.ecogo.ecomove_web_service.booking_reservation.domain.model.aggregates.Booking;
 import com.ecogo.ecomove_web_service.booking_reservation.domain.model.commands.CancelBookingCommand;
 import com.ecogo.ecomove_web_service.booking_reservation.domain.model.commands.CompleteBookingCommand;
 import com.ecogo.ecomove_web_service.booking_reservation.domain.model.commands.CreateBookingCommand;
 import com.ecogo.ecomove_web_service.booking_reservation.domain.services.BookingCommandService;
 import com.ecogo.ecomove_web_service.booking_reservation.infrastructure.persistance.jpa.BookingRepository;
+import com.ecogo.ecomove_web_service.shared.application.internal.outboundservices.acl.ExternalUserService;
 import com.ecogo.ecomove_web_service.vehicle_management.domain.model.aggregates.EcoVehicle;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +18,10 @@ import java.util.Optional;
 @Service
 public class BookingCommandServiceImpl implements BookingCommandService { // Service for handling booking commands
     private final BookingRepository bookingRepository;
-    private final ExternalUserServiceToBooking externalUserService;
-    private final ExternalEcoVehicleServiceToBooking externalEcoVehicleService;
+    private final ExternalUserService externalUserService;
+    private final ExternalEcoVehicleService externalEcoVehicleService;
 
-    public BookingCommandServiceImpl(BookingRepository bookingRepository, ExternalUserServiceToBooking externalUserService, ExternalEcoVehicleServiceToBooking externalEcoVehicleService){
+    public BookingCommandServiceImpl(BookingRepository bookingRepository, ExternalUserService externalUserService, ExternalEcoVehicleService externalEcoVehicleService){
         this.bookingRepository = bookingRepository;
         this.externalUserService = externalUserService;
         this.externalEcoVehicleService = externalEcoVehicleService;
