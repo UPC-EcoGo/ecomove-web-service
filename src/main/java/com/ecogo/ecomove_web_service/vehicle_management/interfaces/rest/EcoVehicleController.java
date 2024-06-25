@@ -21,7 +21,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/api/v1/eco-vehicle")
+@RequestMapping("/api/v1/eco-vehicles")
+@CrossOrigin(origins = "*")
 @Tag(name="EcoVehicles", description = "EcoVehicles Management Endpoints")
 public class EcoVehicleController {
 
@@ -35,19 +36,29 @@ public class EcoVehicleController {
 
     @Operation(summary = "Create a new eco vehicle", description = "Creates a new eco vehicle with the specified attributes")
     @PostMapping
+    @CrossOrigin(origins = "*")
     public ResponseEntity<EcoVehicleResource> createEcoVehicle(@RequestBody CreateEcoVehicleResource resource){
         Optional<EcoVehicle> ecoVehicle = ecoVehicleCommandService.handle(CreateEcoVehicleCommandFromResourceAssembler.toCommandFromResource(resource));
         return ecoVehicle.map(source -> new ResponseEntity<>(EcoVehicleResourceFromEntityAssembler.toResourceFromEntity(source), CREATED)).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @Operation(summary = "Get eco vehicles by id", description = "Returns the eco vehicle with the specified id")
-    @GetMapping("{id}")
+    @GetMapping("id/{id}")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<EcoVehicleResource> getEcoVehicleById(@PathVariable Long id){
         Optional<EcoVehicle> ecoVehicle = ecoVehicleQueryService.handle(new GetEcoVehicleByIdQuery(id));
         return ecoVehicle.map(source -> new ResponseEntity<>(EcoVehicleResourceFromEntityAssembler.toResourceFromEntity(source), OK)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Get all eco vehicles", description = "Returns all the eco vehicles in the database")
+
+    private ResponseEntity<List<EcoVehicleResource>> getAllEcoVehicles(){
+        var getAllEcoVehiclesQuery = new GetAllEcoVehicleQuery();
+        var ecoVehicles = ecoVehicleQueryService.handle(getAllEcoVehiclesQuery);
+        if (ecoVehicles.isEmpty()) return ResponseEntity.notFound().build();
+        var ecoVehicleResources = ecoVehicles.stream().map(EcoVehicleResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(ecoVehicleResources);
+    }
+
     private ResponseEntity<List<EcoVehicleResource>> getAllEcoVehiclesByType(String type){
         var getAllEcoVehicleByTypeQuery = new GetAllEcoVehicleByTypeQuery(type);
         var ecoVehicles = ecoVehicleQueryService.handle(getAllEcoVehicleByTypeQuery);
@@ -82,6 +93,7 @@ public class EcoVehicleController {
 
     @Operation(summary="Get eco vehicles with parameters", description = "Returns the eco vehicles with the specified parameters")
     @GetMapping
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> getEcoVehiclesWithParameters(@RequestParam Map<String, String> params){
         if(params.containsKey("type") && params.containsKey("model")){
             return getAllEcoVehiclesByTypeAndModel(params.get("type"), params.get("model"));
@@ -95,7 +107,7 @@ public class EcoVehicleController {
         else if (params.containsKey("batteryLevel")){
             return getAllEcoVehiclesByBatteryLevelGreaterThan(Integer.parseInt(params.get("batteryLevel")));
         }else{
-            return ResponseEntity.badRequest().build();
+            return getAllEcoVehicles();
         }
     }
 }
